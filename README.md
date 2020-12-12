@@ -3,11 +3,11 @@
 **Search and play videos on youtube in cli**
 
 Main features:
-• Search for Videos or Playlists on youtube
-• View the search results
-• Play a video or only listen to audio
-• View a history of recently played videos
-• Download audio or video file from search resultts
+*  Search for Videos or Playlists on youtube
+*  View the search results
+*  Play a video or only listen to audio
+*  View a history of recently played videos
+*  Download audio or video file from search results
 
 That's it. mini-youtube-player is not intended to have many features.\n
 Instead it is intended to be simple and just work. (hopefully)
