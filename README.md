@@ -1,5 +1,6 @@
-# Mini Youtube Player
-> Search and play videos on youtube in cli
+## Mini Youtube Player
+
+**Search and play videos on youtube in cli**
 
 Main features:
 * Search for Videos or Playlists on youtube
@@ -15,24 +16,24 @@ Mini-Youtube-Player uses youtube-search-python from https://github.com/alexmerce
 Have fun.
 Don't do stuff you are not allowed to do.
 
-## Installation
+### Installation
 
 ```sh
 pip install mini-youtube-player
 ```
 
-## Usage example
+### Usage example
 
 ```sh
 python mini-youtube-player
 ```
 
-## Release History
+### Release History
 
 * 1.0.0
     * First version published.
 
-## Meta
+### Meta
 
 Tobias paar – mini-youtube-player@pato.at
 
