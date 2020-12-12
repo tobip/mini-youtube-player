@@ -1,15 +1,15 @@
-## Mini Youtube Player
+## mini-youtube-player
 
 **Search and play videos on youtube in cli**
 
 Main features:
-[x] Search for Videos or Playlists on youtube
-[x] View the search results
-[x] Play a video or only listen to audio
-[x] View a history of recently played videos
-[x] Download audio or video file from search resultts
+• Search for Videos or Playlists on youtube
+• View the search results
+• Play a video or only listen to audio
+• View a history of recently played videos
+• Download audio or video file from search resultts
 
-That's it. mini-youtube-player is not intended to have many features.
+That's it. mini-youtube-player is not intended to have many features.\n
 Instead it is intended to be simple and just work. (hopefully)
 
 mini-youtube-player uses https://github.com/alexmercerind/youtube-search-python -- thanks for the great work!
