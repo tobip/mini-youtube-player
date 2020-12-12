@@ -9,7 +9,7 @@ Main features:
 *  View a history of recently played videos
 *  Download audio or video file from search results
 
-That's it. mini-youtube-player is not intended to have many features.\n
+That's it. mini-youtube-player is not intended to have many features.  
 Instead it is intended to be simple and just work. (hopefully)
 
 mini-youtube-player uses https://github.com/alexmercerind/youtube-search-python -- thanks for the great work!
