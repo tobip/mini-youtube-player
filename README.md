@@ -1,8 +1,7 @@
-## mini-youtube-player
+**Search and play youtube videos from the command line**
 
-**Search and play videos on youtube in cli**
+### Main features:
 
-Main features:
 *  Search for Videos or Playlists on youtube
 *  View the search results
 *  Play a video or only listen to audio
@@ -22,6 +21,8 @@ Don't do stuff you are not allowed to do.
 ```sh
 $ pip install mini-youtube-player
 ```
+
+See [mini-youtube-player on pypi.org](https://pypi.org/project/mini-youtube-player/).
 
 ### Usage example
 
