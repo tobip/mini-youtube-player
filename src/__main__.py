@@ -1,4 +1,9 @@
-import os, pickle, time, re
+import os, pickle, time, re, pyperclip, runpy
+# try:
+    # import pyperclip
+# except:
+    # print('pyperclip is needed to copy youtube-urls to your clipboard. use \'pip install pyperclip\' to install it')
+
 from pathlib import Path
 from youtubesearchpython import SearchVideos, SearchPlaylists
 from termcolor import colored
@@ -9,15 +14,37 @@ class MyYoutubePlayer:
 
     def __init__(self):
         self.history_dir = str(Path.home()) + '/.config/mini-youtube-player/history'
-        self.video_playback = False
+        self.config_dir = str(Path.home()) + '/.config/mini-youtube-player/config.py'
+
+        try:
+            config = runpy.run_path(self.config_dir)
+        except:
+            with open(self.config_dir, 'w') as f:
+                f.write('''
+# which player to use. available options are:
+# ydl-mpv: get stream with youtube-dl and pass it to mpv (DEFAULT)
+# ydl-vlc: get stream with youtube-dl and pass it to vlc
+# vlc: play youtube video with vlc
+# cvlc: play youtube video with cvlc
+# mpv: playy youtube video with mpv
+player = 'ydl-mpv'
+
+# default playback mode. 
+# False: play audio only as default
+# True: play video as default
+playback_mode = False
+''')
+            config = runpy.run_path(self.config_dir)
+        
         self.history = None
         self.results = None
         self.search_string = ''
-        self.player = 'mpv'
-        self.player = 'ydl-vlc'
-        self.player = 'cvlc'
-        self.player = 'ydl-mpvh'
-        self.player = 'ydl-mpv'
+        self.playing_text = ''
+        
+        self.player = config['player'] #'ydl-mpv'
+        self.video_playback = config['playback_mode'] #False
+
+        # os.system('reset')
 
         # print('\n(Video-Playback is OFF)')
         # print('Enter: [H]elp, [q]uit, [v]ideo on/off, [number] to play audio/video, [text] to search videos on youtube')
@@ -61,6 +88,8 @@ class MyYoutubePlayer:
     One advantage is that loading times are usually very quick - depending on your network speed.
     
     To overcome this drawback you can use 'v # mpv' or 'v # cvlc' to directly play the video in the player without using youtube-dl.
+    You can also set the default player in the file ~/.config/mini-youtube-player/config.py
+    In the same file you can set the default viewing mode (see SHORTCUTS for explanation).
     
     The 'v # hd' command will try to find video in higher quality than standard. This will need ffmpeg in addition to youtube-dl and mpv.
         
@@ -71,10 +100,11 @@ class MyYoutubePlayer:
     including: Space for play/pause, Arrow keys for seek forward/backward, f for fullscreen, q for quit etc.
     For a full list of commands, type 'man mpv' and read the INTERACTIVE CONTROL section.
     
-    Some shortcuts for quicker use:
-    #: Will immediately play the given number in the viewing-mode that is set (default is audio). You don't have to use 'a #' or 'v #'.
-    v: Will toggle the viewing-mode to 'video' or 'audio'.
-    text: This will search for videos containing 'text'.
+    Some SHORTCUTS for quicker use:
+    • #: Will immediately play the given number in the viewing-mode that is set (default is audio). You don't have to use 'a #' or 'v #'.
+    • m: Will toggle the viewing-mode between 'video' and 'audio'. The mode is reset at every new run of the application to audio.
+    • text: This will search for videos containing 'text'.
+    • instead of 'a #' or 'v #' or 'v # hd' you can omit spaces and use 'a#', 'v#' and 'v#hd' respectively. even '#hd' is possible.
     
     Have fun.
     Don't do stuff you are not allowed to do.
@@ -128,9 +158,12 @@ class MyYoutubePlayer:
             print(text)
 
 
-    def play(self, numbers, mode=None, quality=None):
+    def play(self, numbers, mode=None, quality=None, player=None):
         try:
             for i in numbers:
+                if player is None: player = self.player
+                # print(player)
+                
                 video = self.results[i]
                 #yt_id = video['id']
                 yt_link = video['link']
@@ -138,38 +171,70 @@ class MyYoutubePlayer:
                 self.add_to_history(video)
                 
                 if 'duration' in video:
-                    print(colored('\n Playing: ' + video['title'] + ' (' +  video['duration'] + ')', 'magenta'))
+                    self.playing_text = '\n Playing with ' + player + ':\n ' + colored(video['title'] + ' (' +  video['duration'] + ')', 'magenta') + '\n ' + yt_link + '\n'
                 else:
-                    print(colored('\n Playing: ' + video['title'] + ' (Playlist)\n', 'magenta'))
-                
-                print(' ' + yt_link + '\n')
+                    self.playing_text = '\n Playing with ' + player + ':\n ' + colored(video['title'] + ' (Playlist)\n', 'magenta') + '\n ' + yt_link + '\n'
+                print(self.playing_text)
                 
                 if self.video_playback or mode == 'v':
                     if quality == 'hd':
                         os.system(f'ffmpeg -loglevel quiet -i $(youtube-dl -g {yt_link} -f 303/bestvideo) -i $(youtube-dl -g {yt_link} -f bestaudio) -f matroska -c copy - | mpv -')
-                    elif self.player == 'cvlc':
+                        os.system('reset')
+                    elif player == 'cvlc':
                         os.system(f'cvlc -q --play-and-exit {yt_link}')
-                    elif self.player == 'ydl-mpv':
+                        os.system('reset')
+                    elif player == 'vlc':
+                        os.system(f'vlc -q --play-and-exit {yt_link}')
+                        os.system('reset')
+                    elif player == 'ydl-mpv':
                         os.system(f'youtube-dl -i {yt_link} -o - | mpv -')
-                    elif self.player == 'ydl-vlc':
+                        os.system('reset')
+                    elif player == 'ydl-vlc':
                         os.system(f'youtube-dl -i {yt_link} -o - | vlc -')
+                        os.system('reset')
                     else:
                         os.system(f'mpv {yt_link}')
+                        os.system('reset')
                 else:
                     os.system(f'mpv --no-video {yt_link}')
+                    os.system('reset')
                     #os.system(f'youtube-dl -f bestaudio {ytid} -o - | mpv -')
+        except:
+            pass
+    
+    def download(self, numbers, mode):
+        try:
+            video = self.results[numbers]
+            cmd = 'youtube-dl -i --no-mtime '
+            if mode == 'audio': cmd = cmd + '-x '
+            os.system(cmd + video['link'])
+        except:
+            pass
+
+    def yank(self, number):
+        try:
+            video = self.results[number]
+            pyperclip.copy(video['link'])
         except:
             pass
 
 
     def main(self):
         while True:
+
+            # os.system('reset')
             
-            if self.results is not None: self.print_results()
+            if self.results is not None:
+                print(self.playing_text)
+                self.print_results()
+
             print('''
  s *: search for * in videos.             v #: play video.                   v # mpv: use mpv player.        dv #: download video.        h: show history.
  p *: search for * in playlists.          a #: play audio.                   v # vlc: use cvlc player.       da #: download audio.        H: show Help.
    a: play all search results.         v # hd: try playing video in HD.      v # cvlc: use vlc player.        y #: copy (yank) url.''')
+
+            # https://github.com/kcsaff/getkey
+
             i = input('\n> ')
             
             # q is for Quit
@@ -185,14 +250,15 @@ class MyYoutubePlayer:
                 self.print_help()
             
             # v is to toggle video_playback on/off
-            elif i == 'v':
+            elif i == 'm':
                 self.video_playback = not self.video_playback
-                print(' (Video-Playback is ', 'ON' if self.video_playback else 'OFF', ')', sep='')
+                print(' (Playback-mode is set to ', 'VIDEO' if self.video_playback else 'AUDIO', ')', sep='')
             
             # show history
             elif i == 'h':
                 self.results = []
                 self.get_history_from_file()
+                self.search_string = '<showing playback history>'
                 if self.history is None:
                     print('\n No history is saved on this computer.')
                     self.results = None
@@ -211,16 +277,49 @@ class MyYoutubePlayer:
                 self.play([int(i)-1])
             
             # play the video using v mode
-            elif re.match("^v \d$", i):
-                self.play([int(i[2:])-1], mode='v')
+            elif re.match("^v ?\d+$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='v')
             
             # play the video using v mode in HD!
-            elif re.match("^v \d hd$", i):
-                self.play([int(i[2:-3])-1], mode='v', quality='hd')
+            elif re.match("^v? ?\d+ ?hd$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='v', quality='hd')
+            
+            # play the video using mpv mode
+            elif re.match("^v? ?\d+ ?mpv$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='v', player='mpv')
+            
+            # play the video using vlc mode
+            elif re.match("^v? ?\d+ ?vlc$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='v', player='vlc')
+            
+            # play the video using cvlc mode
+            elif re.match("^v? ?\d+ ?cvlc$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='v', player='cvlc')
             
             # play the video using a mode
-            elif re.match("^a \d$", i):
-                self.play([int(i[2:])-1], mode='a')
+            elif re.match("^a ?\d+$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.play([number-1], mode='a')
+            
+            # download video
+            elif re.match("^dv ?\d+$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.download(number-1, 'video')
+            
+            # download audio
+            elif re.match("^da ?\d+$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.download(number-1, 'audio')
+            
+            # yank url
+            elif re.match("^y ?\d+$", i):
+                number = int(''.join(x for x in i if x.isdigit()))
+                self.yank(number-1)
             
             # Playlist search
             elif i[:2] == 'p ':
@@ -230,11 +329,10 @@ class MyYoutubePlayer:
             # default video search
             elif i[:2] == 's ':
                 self.results = SearchVideos(i[2:], offset=1, mode='dict', max_results=19, language="en-US", region="AT").result()['search_result']
-                self.search_string = i
+                self.search_string = i[2:]
             
             # default video search
             else:
-                # breakpoint()
                 self.results = SearchVideos(i, offset=1, mode='dict', max_results=19, language="en-US", region="AT").result()['search_result']
                 self.search_string = i
 

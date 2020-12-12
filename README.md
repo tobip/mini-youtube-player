@@ -20,13 +20,13 @@ Don't do stuff you are not allowed to do.
 ### Installation
 
 ```sh
-pip install mini-youtube-player
+$ pip install mini-youtube-player
 ```
 
 ### Usage example
 
 ```sh
-mini-youtube-player
+$ mini-youtube-player
 ```
 
 ### Release History
