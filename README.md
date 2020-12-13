@@ -31,6 +31,8 @@ See [mini-youtube-player on pypi.org](https://pypi.org/project/mini-youtube-play
 $ mini-youtube-player
 ```
 
+![screenshot](../master/screenshot.png)
+
 ### Release History
 
 * 1.0.3
