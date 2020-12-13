@@ -76,14 +76,19 @@ playback_mode = False
     Main features:
     • It only works from the command line.
     • It does not use any Google or Youtube APIs, hence no struggle with their API-Keys and limitations.
-    • You can use it to search youtube for videos or playlists, view audio or video, or download them.
-    • It can store and view a local playback history.
+    • You can use it to search youtube for videos or playlists, audio and video playback or download.
+    • It can use a local playback history file.
     • It uses colored output for videos that you have already played.
     
-    Additional packages required: youtubesearchpython from https://github.com/alexmercerind/youtube-search-python -- thanks for the great work!!
-    
     That's it. mini-youtube-player is not intended to have many features.
-    Instead it is intended to be simple and just work. (hopefully)
+    Instead it is intended to be easy to use and just work. (hopefully)
+    
+    Youtube search is done by youtubesearchpython from https://github.com/alexmercerind/youtube-search-python -- thanks for the great work!!
+    
+    - - - - -
+
+    If you want me to save a history of played videos, create the empty file ~/.config/miniyoutubeplayer/history with read/write rights set to your user.
+    mini-youtube-player will automatically use this file once it exists.
     
     mini-youtube-player uses youtube-dl and mpv to playback youtube videos.
     One drawback is that the amount of time you can scroll forward a video is very limited.
@@ -93,16 +98,15 @@ playback_mode = False
     You can also set the default player in the file ~/.config/mini-youtube-player/config.py
     In the same file you can set the default viewing mode (see SHORTCUTS for explanation).
     
+    - - - - -
+
     The 'v # hd' command will try to find video in higher quality than standard. This will need ffmpeg in addition to youtube-dl and mpv.
         
-    If you want me to save a history of played videos, create the empty file ~/.config/miniyoutubeplayer/history with read/write rights set to your user.
-    mini-youtube-player will automatically use this file once it exists.
-    
     For playback we use the mpv media player and you can use its default shortkeys while playing video or audio,
     including: Space for play/pause, Arrow keys for seek forward/backward, f for fullscreen, q for quit etc.
     For a full list of commands, type 'man mpv' and read the INTERACTIVE CONTROL section.
     
-    Some SHORTCUTS for quicker use:
+    SHORTCUTS: You can ommit parts of the commands to use mini-youtube-player even faster!
     • #: Will immediately play the given number in the viewing-mode that is set (default is audio). You don't have to use 'a #' or 'v #'.
     • m: Will toggle the viewing-mode between 'video' and 'audio'. The mode will get reset to whatever is set in config.py when you close the application.
     • text: This will search for videos containing 'text'.
@@ -231,9 +235,9 @@ playback_mode = False
                 self.print_results()
 
             print('''
- s *: search for * in videos.             v #: play video.                   v # mpv: use mpv player.        dv #: download video.        h: show history.
- p *: search for * in playlists.          a #: play audio.                   v # vlc: use cvlc player.       da #: download audio.        H: show Help.
-   a: play all search results.         v # hd: try playing video in HD.      v # cvlc: use vlc player.        y #: copy (yank) url.''')
+ s *: search for * in videos.             v #: play video.                   dv #: download video.        h: show history.
+ p *: search for * in playlists.          a #: play audio.                   da #: download audio.        H: show Help.
+   a: play all search results.         v # hd: try playing video in HD.       y #: copy (yank) url.''')
 
             # https://github.com/kcsaff/getkey
 

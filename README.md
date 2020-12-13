@@ -20,9 +20,12 @@ Don't do stuff you are not allowed to do.
 
 You need one of `mpv` or `vlc` as a player installed on your system.
 
+Then do:
+
 ```sh
 $ pip install mini-youtube-player
 ```
+
 This will also install required dependencies: `youtube-dl`, `youtube-search-python`, `termcolor`, `pyperclip`.
 
 See [mini-youtube-player on pypi.org](https://pypi.org/project/mini-youtube-player/).
