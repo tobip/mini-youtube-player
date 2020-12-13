@@ -2,14 +2,14 @@
 
 ### Main features:
 
-*  Search for Videos or Playlists on youtube
+*  Search for videos or playlists on youtube
 *  View the search results
-*  Play a video or only listen to audio
-*  View a history of recently played videos
+*  Play a video/playlist or only listen to audio
+*  View a history of recently played videos/playlists
 *  Download audio or video file from search results
 
 That's it. mini-youtube-player is not intended to have many features.  
-Instead it is intended to be simple and just work. (hopefully)
+Instead it is intended to be easy to use and just work. (hopefully)
 
 mini-youtube-player uses https://github.com/alexmercerind/youtube-search-python -- thanks for the great work!
 
@@ -21,6 +21,7 @@ Don't do stuff you are not allowed to do.
 ```sh
 $ pip install mini-youtube-player
 ```
+This will also install required dependencies: `youtube-search-python`, `termcolor`, `pyperclip`.
 
 See [mini-youtube-player on pypi.org](https://pypi.org/project/mini-youtube-player/).
 
